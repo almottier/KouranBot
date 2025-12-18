@@ -1,0 +1,14 @@
+# Telegram Bot Configuration
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+
+# PostgreSQL Configuration
+POSTGRES_DB=kouranbot
+POSTGRES_USER=kouranbot_user
+POSTGRES_PASSWORD=strong_password_here
+
+# Bot Configuration
+POLLING_INTERVAL=15
+JSON_URL=https://raw.githubusercontent.com/MrSunshyne/mauritius-dataset-electricity/main/data/power-outages.latest.json
+
+# PostgreSQL Connection (e.g. for Coolify)
+# DATABASE_URL=postgres://user:password@host:5432/database
