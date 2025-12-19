@@ -4,6 +4,7 @@ import asyncio
 import logging
 from datetime import datetime
 from typing import List, Dict, Any
+from zoneinfo import ZoneInfo
 
 import httpx
 from telegram import Bot
@@ -196,10 +197,15 @@ class OutageMonitor:
 
     def _format_outage_message(self, outage: Outage, lang: str) -> str:
         """Format outage information as a message."""
-        # Format times
-        from_time_str = outage.from_time.strftime("%H:%M")
-        to_time_str = outage.to_time.strftime("%H:%M")
-        date_str = outage.from_time.strftime("%d %B %Y")
+        # Convert UTC times to Mauritius timezone (UTC+4)
+        mauritius_tz = ZoneInfo("Indian/Mauritius")
+        from_time_local = outage.from_time.replace(tzinfo=ZoneInfo("UTC")).astimezone(mauritius_tz)
+        to_time_local = outage.to_time.replace(tzinfo=ZoneInfo("UTC")).astimezone(mauritius_tz)
+
+        # Format times in Mauritius timezone
+        from_time_str = from_time_local.strftime("%H:%M")
+        to_time_str = to_time_local.strftime("%H:%M")
+        date_str = from_time_local.strftime("%d %B %Y")
 
         district_display = outage.district.replace("_", " ").title()
 
