@@ -10,5 +10,9 @@ POSTGRES_PASSWORD=strong_password_here
 POLLING_INTERVAL=15
 JSON_URL=https://raw.githubusercontent.com/MrSunshyne/mauritius-dataset-electricity/main/data/power-outages.latest.json
 
+# CEB Direct Scraping (fetches directly from CEB website instead of JSON)
+ENABLE_DIRECT_SCRAPING=true
+CEB_URL=https://ceb.mu/customer-corner/power-outage-information
+
 # PostgreSQL Connection (e.g. for Coolify)
 # DATABASE_URL=postgres://user:password@host:5432/database

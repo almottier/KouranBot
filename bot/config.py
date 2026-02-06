@@ -26,6 +26,10 @@ JSON_URL = os.getenv(
     "https://raw.githubusercontent.com/MrSunshyne/mauritius-dataset-electricity/main/data/power-outages.latest.json"
 )
 
+# CEB Direct Scraping Configuration
+CEB_URL = os.getenv("CEB_URL", "https://ceb.mu/customer-corner/power-outage-information")
+ENABLE_DIRECT_SCRAPING = os.getenv("ENABLE_DIRECT_SCRAPING", "true").lower() == "true"
+
 # Pagination Configuration
 LOCALITIES_PER_PAGE = 10
 DISTRICTS_PER_ROW = 2

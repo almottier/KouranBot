@@ -59,7 +59,7 @@ docker-compose up -d
 2. Choose localities within that district
 3. Get notified when power outages are scheduled in your areas
 
-The bot checks for new outages every 15 minutes.
+The bot checks for new outages every 5 minutes.
 
 ## Data Source
 

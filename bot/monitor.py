@@ -10,7 +10,7 @@ import httpx
 from telegram import Bot
 from telegram.error import TelegramError
 
-from bot.config import JSON_URL
+from bot.config import JSON_URL, ENABLE_DIRECT_SCRAPING
 from bot.database import (
     get_db, Outage, NotificationSent, get_users_with_language_for_locality
 )
@@ -45,17 +45,33 @@ class OutageMonitor:
             logger.error(f"Error checking for outages: {e}", exc_info=True)
 
     async def _fetch_outages(self) -> Dict[str, List[Dict[str, Any]]]:
-        """Fetch outages from JSON endpoint."""
+        """Fetch outages, trying direct CEB scraping first with JSON fallback."""
+        if ENABLE_DIRECT_SCRAPING:
+            try:
+                from bot.ceb_parser import fetch_and_parse_outages
+                data = await fetch_and_parse_outages()
+                if data.get("today") or data.get("future"):
+                    logger.info("Fetched outages from CEB website")
+                    return data
+                logger.warning("CEB scraping returned no data, falling back to JSON")
+            except Exception as e:
+                logger.error(f"CEB scraping failed: {e}, falling back to JSON")
+
+        return await self._fetch_from_json_url()
+
+    async def _fetch_from_json_url(self) -> Dict[str, List[Dict[str, Any]]]:
+        """Fetch outages from JSON endpoint (fallback)."""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.get(JSON_URL)
                 response.raise_for_status()
+                logger.info("Fetched outages from JSON endpoint")
                 return response.json()
         except httpx.HTTPError as e:
-            logger.error(f"HTTP error fetching outages: {e}")
+            logger.error(f"HTTP error fetching outages from JSON: {e}")
             return {}
         except Exception as e:
-            logger.error(f"Error fetching outages: {e}")
+            logger.error(f"Error fetching outages from JSON: {e}")
             return {}
 
     def _process_outages(self, data: Dict[str, List[Dict[str, Any]]]) -> List[str]:

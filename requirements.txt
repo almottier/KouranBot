@@ -5,3 +5,5 @@ httpx==0.25.2
 APScheduler==3.10.4
 python-dotenv==1.0.0
 aiohttp==3.9.1
+beautifulsoup4==4.12.2
+lxml==5.1.0

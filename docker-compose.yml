@@ -25,7 +25,7 @@ services:
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      POLLING_INTERVAL: ${POLLING_INTERVAL:-15}
+      POLLING_INTERVAL: ${POLLING_INTERVAL:-5}
       JSON_URL: ${JSON_URL}
     restart: unless-stopped
     ports:
